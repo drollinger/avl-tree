@@ -5,10 +5,8 @@
 
 using namespace std;
 
-int getMainMenuInput()
+void printMainMenu()
 {
-	int selection;
-	bool isBadSelection;
 	cout << "Choose the option to be performed:\n"
 	     << "  1. Create_Tree\n"
 	     << "  2. Insertion\n"
@@ -16,11 +14,18 @@ int getMainMenuInput()
 	     << "  4. Search\n"
 	     << "  5. Traversal\n"
 	     << "  6. Delete_Tree\n"
-	     << "  7. Check_Balance\n";
+	     << "  7. Check_Balance\n"
+	     << "  8. Exit\n";
+}
+
+int getMainMenuInput()
+{
+	int selection;
+	bool isBadSelection;
 	do
 	{
 		selection = getIntInput();
-		isBadSelection = selection > 7 || selection < 1;
+		isBadSelection = selection < 1 || selection > 8;
 		if (isBadSelection)
 			cout << "Bad Selection. Try Again.\n";
 	} while (isBadSelection);
