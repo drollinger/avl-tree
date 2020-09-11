@@ -9,7 +9,7 @@ using namespace std;
 int main()
 {
 	printMainMenu();
-	//Node 
+	AvlTree avlTree;
 	int selection;
 	do
 	{
@@ -17,13 +17,26 @@ int main()
 		switch (selection)
 		{
 			case CREATE_TREE:
+				avlTree.createTree();
+				break;
 			case INSERTION:
+				avlTree.insert();
+				break;
 			case DELETION:
+				avlTree.remove();
+				break;
 			case SEARCH:
+				avlTree.search();
+				break;
 			case TRAVERSAL:
+				avlTree.traverse();
+				break;
 			case DELETE_TREE:
+				avlTree.delete_tree();
+				break;
 			case CHECK_BALANCE:
-				createTree();
+				avlTree.check_balance();
+				break;
 		}
 	} while (selection != EXIT);
 }
