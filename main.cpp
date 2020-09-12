@@ -22,17 +22,18 @@ int main()
 		{
 			case CREATE_TREE:
 				arrayOfValues = getFileInput();
-				cout << "Create Tree:";
-				for (int value : arrayOfValues)
-					cout << " " << value;
 				avlTree.createTree(arrayOfValues);
+				cout << "Create Tree:";
+				avlTree.preOrderPrint();
 				cout << endl;
 				break;
 			case INSERTION:
 				cout << "Enter the Integer Value to Insert.\n";
 				input = getIntInput();
 				avlTree.insert(input);
-				cout << "Inserted: " << input << endl;
+				cout << "Inserted:";
+				avlTree.preOrderPrint();
+				cout << endl;
 				break;
 			case DELETION:
 				cout << "Enter the Integer Value to Delete.\n";
@@ -40,7 +41,11 @@ int main()
 				if(!avlTree.remove(input))
 					cout << "Node cannot be deleted. Empty Tree!\n";
 				else
-					cout << "Deleted: " << input << endl;
+				{
+					cout << "Deleted:";
+					avlTree.preOrderPrint();
+					cout << endl;
+				}
 				break;
 			case SEARCH:
 				cout << "Enter the Integer Value to Search.\n";
@@ -56,17 +61,17 @@ int main()
 				switch (input)
 				{
 					case PREORDER:
-						cout << "Pre-Order Traversal: ";
+						cout << "Pre-Order Traversal:";
 						avlTree.preOrderPrint();
 						cout << endl;
 						break;
 					case POSTORDER:
-						cout << "Post-Order Traversal: ";
+						cout << "Post-Order Traversal:";
 						avlTree.postOrderPrint();
 						cout << endl;
 						break;
 					case INORDER:
-						cout << "In-Order Traversal: ";
+						cout << "In-Order Traversal:";
 						avlTree.inOrderPrint();
 						cout << endl;
 						break;

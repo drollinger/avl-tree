@@ -23,8 +23,7 @@ public:
 		if (headNode == nullptr)
 			headNode = new Node(value);
 		else
-			insert(value, headNode);
-		headNode = balance(headNode);
+			headNode = insert(value, headNode);
 	}
 	bool remove(int value)
 	{
@@ -94,7 +93,6 @@ private:
 				node->leftNode = insert(value, node->leftNode);
 			else
 				node->rightNode = insert(value, node->rightNode);
-
 			node = balance(node);
 		}
 		return node;
