@@ -1,5 +1,7 @@
 #include "avlTree.h"
 #include <iostream>
+#include <ostream>
+#include <vector>
 
 using namespace std;
 class AvlTree
@@ -9,9 +11,11 @@ public:
 	{
 		headNode = nullptr;
 	}
-	void createTree()
+	void createTree(vector<int> arrayOfValues)
 	{
-		cout << "TODO1\n";
+		delete_tree();
+		for (int i : arrayOfValues)
+			insert(i);
 	}
 	void insert(int value)
 	{
@@ -21,11 +25,15 @@ public:
 			insert(value, headNode);
 		headNode = balance(headNode);
 	}
-	void remove()
+	bool remove(int value)
 	{
-		cout << "TODO3\n";
+		if (headNode == nullptr)
+			return false;
+		else 
+			remove(value, headNode);
+		return true;
 	}
-	void search()
+	void search(int value)
 	{
 		cout << "TODO4\n";
 	}
@@ -35,11 +43,13 @@ public:
 	}
 	void delete_tree()
 	{
-		cout << "TODO6\n";
+		delete headNode;
+		headNode = nullptr;
 	}
-	void check_balance()
+	int check_balance()
 	{
-		cout << "TODO7\n";
+		return headNode != nullptr ? 
+			abs(getHeight(headNode->leftNode) - getHeight(headNode->rightNode)) : -1;
 	}
 private:
 	struct Node
@@ -56,22 +66,54 @@ private:
 	};
 	Node* headNode;
 
-	void insert(int value, Node* node)
+	Node* insert(int value, Node* node)
 	{
 		if (node == nullptr)
 			node = new Node(value);
+		else if (value == node->value)
+			cout << "Duplicate Value Not Added.\n";
 		else
 		{
 			if (value < node->value)
-				insert(value, node->leftNode);
-			else if (value > node->value)
-				insert(value, node->rightNode);
+				node->leftNode = insert(value, node->leftNode);
 			else
-				cout << "Duplicate Value Not Added.\n";
+				node->rightNode = insert(value, node->rightNode);
 
-			node->leftNode = balance(node->leftNode);
-			node->rightNode = balance(node->leftNode);
+			node = balance(node);
 		}
+		return node;
+	}
+
+	Node* remove(int value, Node* node)
+	{
+		if (node == nullptr)
+			cout << "Node cannot be found. Deletion cannot be performed.\n";
+		else if (value != node->value)
+			if (value < node->value)
+				node->leftNode = remove(value, node->leftNode);
+			else
+				node->rightNode = remove(value, node->rightNode);
+		else
+		{
+			Node* successor;
+			if (node->leftNode != nullptr && node->rightNode != nullptr)
+			{
+				successor = getRightest(node->leftNode);
+				successor->leftNode = removeRightest(node->leftNode);
+				successor->rightNode = node->rightNode;
+			}
+			else if (node->leftNode == nullptr && node->rightNode != nullptr)
+				successor = node->rightNode;
+			else if (node->rightNode == nullptr && node->leftNode != nullptr)
+				successor = node->leftNode;
+			else
+				successor = nullptr;
+			delete node;
+			node = nullptr;
+			successor = balance(successor);
+			return successor;
+		}
+		return node;
 	}
 
 	Node* balance(Node* node)
@@ -105,12 +147,17 @@ private:
 
 		//Save children of the LeftRight Node
 		leftNode->rightNode = leftRightNode->leftNode;
-		Node* leftestNode = getLeftestNode(node);
-		leftestNode->leftNode = leftRightNode->rightNode;
+		node->leftNode = leftRightNode->rightNode;
 
 		//Set the new main node
 		leftRightNode->leftNode = leftNode;
 		leftRightNode->rightNode = node;
+
+		//Update the heights of affected nodes
+		updateHeight(leftNode);
+		updateHeight(node);
+		updateHeight(leftRightNode);
+
 		return leftRightNode;
 	}
 
@@ -124,6 +171,11 @@ private:
 
 		//Set the new main node
 		leftNode->rightNode = node;
+
+		//Update the heights of affected nodes
+		updateHeight(node);
+		updateHeight(leftNode);
+
 		return leftNode;
 	}
 	Node* rightLeftRotation(Node* node)
@@ -134,12 +186,17 @@ private:
 
 		//Save children of the RightLeft Node
 		rightNode->leftNode = rightLeftNode->rightNode;
-		Node* rightestNode = getRightestNode(node);
-		rightestNode->rightNode = rightLeftNode->leftNode;
+		node->rightNode = rightLeftNode->leftNode;
 
 		//Set the new main node
 		rightLeftNode->leftNode = node;
 		rightLeftNode->rightNode = rightNode;
+
+		//Update the heights of affected nodes
+		updateHeight(rightNode);
+		updateHeight(node);
+		updateHeight(rightLeftNode);
+
 		return rightLeftNode;
 	}
 	Node* rightRightRotation(Node* node)
@@ -152,14 +209,39 @@ private:
 
 		//Set the new main node
 		rightNode->leftNode = node;
+
+		//Update the heights of affected nodes
+		updateHeight(node);
+		updateHeight(rightNode);
+		
 		return rightNode;
 	}
-	Node* getLeftestNode(Node* node)
+	void updateHeight(Node* node)
 	{
-		return node->leftNode == nullptr ? node : getLeftestNode(node->leftNode);
+		if (node != nullptr)
+			node->height = max(getHeight(node->leftNode), getHeight(node->rightNode)) + 1;
 	}
-	Node* getRightestNode(Node* node)
+
+	Node* getRightest(Node* node)
 	{
-		return node->rightNode == nullptr ? node : getRightestNode(node->rightNode);
+		if (node->rightNode != nullptr)
+			return getRightest(node->rightNode);
+		else
+			return node;
 	}
-}
+
+	Node* removeRightest(Node* node)
+	{
+		if (node->rightNode != nullptr)
+			node->rightNode = removeRightest(node->rightNode);
+		else 
+		{
+			Node* leftChild = node->leftNode;
+			delete node;
+			node = nullptr;
+			return leftChild;
+		}
+		node = balance(node);
+		return node;
+	}
+};

@@ -2,6 +2,8 @@
 #include "trim.h"
 #include <iostream>
 #include <string>
+#include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -69,5 +71,15 @@ bool stringIsInt(string str)
 			cout << "Please Only Enter a Single Integer. Try Again.\n";
 	}
 	return isInt;
+}
+
+vector<int> getFileInput()
+{
+	ifstream infile("input.txt");	
+	vector<int> arrayOfValues;
+	int value;
+	while (infile >> value)
+		arrayOfValues.push_back(value);
+	return arrayOfValues;
 }
 

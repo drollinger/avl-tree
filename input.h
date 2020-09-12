@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 using namespace std;
 enum Selection
 {
@@ -15,3 +16,4 @@ void printMainMenu();
 int getIntInput();
 int getMainMenuInput();
 bool stringIsInt(string str);
+vector<int> getFileInput();
