@@ -12,6 +12,8 @@ int main()
 	printMainMenu();
 	AvlTree avlTree;
 	int selection;
+	int input;
+	string nodeInfo;
 	vector<int> arrayOfValues;
 	do
 	{
@@ -28,28 +30,60 @@ int main()
 				break;
 			case INSERTION:
 				cout << "Enter the Integer Value to Insert.\n";
-				avlTree.insert(getIntInput());
+				input = getIntInput();
+				avlTree.insert(input);
+				cout << "Inserted: " << input << endl;
 				break;
 			case DELETION:
 				cout << "Enter the Integer Value to Delete.\n";
-				if(!avlTree.remove(getIntInput()))
+				input = getIntInput();
+				if(!avlTree.remove(input))
 					cout << "Node cannot be deleted. Empty Tree!\n";
+				else
+					cout << "Deleted: " << input << endl;
 				break;
 			case SEARCH:
-				avlTree.search(1);
+				cout << "Enter the Integer Value to Search.\n";
+				nodeInfo = avlTree.search(getIntInput());
+				if (nodeInfo.empty())
+					cout << "Value Not Found.\n";
+				else
+					cout << "Node Found:" << nodeInfo;
 				break;
 			case TRAVERSAL:
-				avlTree.traverse();
+				printTraversalMenu();
+				input = getTravMenuInput();
+				switch (input)
+				{
+					case PREORDER:
+						cout << "Pre-Order Traversal: ";
+						avlTree.preOrderPrint();
+						cout << endl;
+						break;
+					case POSTORDER:
+						cout << "Post-Order Traversal: ";
+						avlTree.postOrderPrint();
+						cout << endl;
+						break;
+					case INORDER:
+						cout << "In-Order Traversal: ";
+						avlTree.inOrderPrint();
+						cout << endl;
+						break;
+				}
 				break;
 			case DELETE_TREE:
-				avlTree.delete_tree();
+				if (avlTree.delete_tree())
+					cout << "Delete Tree: Tree Deleted\n";
+				else
+					cout << "Delete Tree: Tree Does Not Exist\n";
 				break;
 			case CHECK_BALANCE:
-				int balance = avlTree.check_balance();
-				if (balance < 0)
+				input = avlTree.check_balance();
+				if (input < 0)
 					cout << "No Balance Factor. Empty Tree!\n";
 				else
-					cout << "Check Balance: " << balance << endl;
+					cout << "Check Balance: " << input << endl;
 				break;
 		}
 		if (selection != EXIT)

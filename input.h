@@ -12,8 +12,16 @@ enum Selection
 	CHECK_BALANCE = 7,
 	EXIT = 8
 };
+enum travSelection
+{
+	PREORDER = 1,
+	POSTORDER = 2,
+	INORDER = 3,
+};
 void printMainMenu();
+void printTraversalMenu();
 int getIntInput();
 int getMainMenuInput();
+int getTravMenuInput();
 bool stringIsInt(string str);
 vector<int> getFileInput();

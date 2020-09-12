@@ -34,6 +34,28 @@ int getMainMenuInput()
 	return selection;
 }
 
+void printTraversalMenu()
+{
+	cout << "Choose the traverse type:\n"
+	     << "  1. Pre-order\n"
+	     << "  2. Post-order\n"
+	     << "  3. In-order\n";
+}
+
+int getTravMenuInput()
+{
+	int selection;
+	bool isBadSelection;
+	do
+	{
+		selection = getIntInput();
+		isBadSelection = selection < 1 || selection > 3;
+		if (isBadSelection)
+			cout << "Bad Selection. Try Again.\n";
+	} while (isBadSelection);
+	return selection;
+}
+
 int getIntInput()
 {
 	string str; 

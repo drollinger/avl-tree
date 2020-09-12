@@ -1,6 +1,7 @@
 #include "avlTree.h"
 #include <iostream>
 #include <ostream>
+#include <string>
 #include <vector>
 
 using namespace std;
@@ -29,22 +30,37 @@ public:
 	{
 		if (headNode == nullptr)
 			return false;
-		else 
-			remove(value, headNode);
+		remove(value, headNode);
 		return true;
 	}
-	void search(int value)
+	string search(int value)
 	{
-		cout << "TODO4\n";
+		Node* node = search(value, headNode);
+		return node == nullptr ? string() :
+			"\n\tValue: " + to_string(node->value) + "\n" +
+			"\tHeight: " + to_string(node->height) + "\n" +
+			"\tLeft Child Value: " + getNodeValueString(node->leftNode) + "\n" +
+			"\tRight Chile Value: " + getNodeValueString(node->rightNode) + "\n";
 	}
-	void traverse()
+	void preOrderPrint()
 	{
-		cout << "TODO5\n";
+		preOrderPrint(headNode);
 	}
-	void delete_tree()
+	void postOrderPrint()
 	{
+		postOrderPrint(headNode);
+	}
+	void inOrderPrint()
+	{
+		inOrderPrint(headNode);
+	}
+	bool delete_tree()
+	{
+		if (headNode == nullptr)
+			return false;
 		delete headNode;
 		headNode = nullptr;
+		return true;
 	}
 	int check_balance()
 	{
@@ -116,6 +132,43 @@ private:
 		return node;
 	}
 
+	Node* search(int value, Node* node)
+	{
+		if (node == nullptr)
+			return nullptr;
+		else if (value < node->value)
+			return search(value, node->leftNode);
+		else if (value > node->value)
+			return search(value, node->rightNode);
+		else
+			return node;
+	}
+
+	void preOrderPrint(Node* node)
+	{
+		if (node == nullptr)
+			return;
+		cout << " " << node->value;
+		preOrderPrint(node->leftNode);
+		preOrderPrint(node->rightNode);
+	}
+	void postOrderPrint(Node* node)
+	{
+		if (node == nullptr)
+			return;
+		postOrderPrint(node->leftNode);
+		postOrderPrint(node->rightNode);
+		cout << " " << node->value;
+	}
+	void inOrderPrint(Node* node)
+	{
+		if (node == nullptr)
+			return;
+		inOrderPrint(node->leftNode);
+		cout << " " << node->value;
+		inOrderPrint(node->rightNode);
+	}
+
 	Node* balance(Node* node)
 	{
 		if (node == nullptr)
@@ -131,6 +184,7 @@ private:
 		else if (rightHeight - leftHeight > 1)
 			topNode = getHeight(node->rightNode->rightNode) - getHeight(node->rightNode->leftNode) < 0 ?
 				rightLeftRotation(node) : rightRightRotation(node);
+		updateHeight(topNode);
 		return topNode;
 	}
 
@@ -243,5 +297,10 @@ private:
 		}
 		node = balance(node);
 		return node;
+	}
+
+	string getNodeValueString(Node* node)
+	{
+		return node == nullptr ? "NULL" : to_string(node->value);
 	}
 };
